@@ -1,36 +1,76 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
-import java.io.*;
-import java.util.*;
+class stackImpl {
+    private int[] stack;
+    private int top;
+
+    public stackImpl() {
+        stack = new int[10000];
+        top = -1;
+    }
+
+    public void push(int x) {
+        stack[++top] = x;
+    }
+
+    public int pop() {
+        if (top == -1) {
+            return -1;
+        }
+        return stack[top--];
+    }
+
+    public int size() {
+        return top + 1;
+    }
+
+    public int empty() {
+        if (top == -1) {
+            return 1;
+        }
+        return 0;
+    }
+
+    public int top() {
+        if (top == -1) {
+            return -1;
+        }
+        return stack[top];
+    }
+}
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        Stack<Integer> stack = new Stack<>();
+        StringBuilder sb = new StringBuilder();
         int n = Integer.parseInt(br.readLine());
+        stackImpl stack = new stackImpl();
 
         for (int i = 0; i < n; i++) {
-            String[] command = br.readLine().split(" ");
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            String command = st.nextToken();
 
-            switch (command[0]) {
+            switch (command) {
                 case "push":
-                    stack.push(Integer.parseInt(command[1]));
+                    stack.push(Integer.parseInt(st.nextToken()));
                     break;
                 case "pop":
-                    if (!stack.isEmpty()) System.out.println(stack.pop());
-                    else System.out.println("-1");
+                    sb.append(stack.pop()).append("\n");
                     break;
                 case "size":
-                    System.out.println(stack.size());
+                    sb.append(stack.size()).append("\n");
                     break;
                 case "empty":
-                    System.out.println(stack.isEmpty() ? "1" : "0");
+                    sb.append(stack.empty()).append("\n");
                     break;
                 case "top":
-                    if (!stack.isEmpty()) System.out.println(stack.peek());
-                    else System.out.println("-1");
+                    sb.append(stack.top()).append("\n");
                     break;
             }
         }
-        br.close();
+        System.out.println(sb);
     }
 }
