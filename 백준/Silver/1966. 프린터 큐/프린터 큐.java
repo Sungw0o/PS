@@ -7,51 +7,37 @@ import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        StringBuilder sb = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int T = Integer.parseInt(br.readLine()); // 테스트 케이스 수
 
-        for (int t = 0; t < T; t++) {
+        int t = Integer.parseInt(br.readLine());
+
+        for(int i = 0; i < t; i++){
+            StringTokenizer nm = new StringTokenizer(br.readLine());
+            int N = Integer.parseInt(nm.nextToken());
+            int M = Integer.parseInt(nm.nextToken());
+
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int N = Integer.parseInt(st.nextToken()); // 문서의 수
-            int M = Integer.parseInt(st.nextToken()); // 궁금한 문서의 인덱스
-
-            st = new StringTokenizer(br.readLine());
-            Deque<Document> queue = new ArrayDeque<>();
-            for (int i = 0; i < N; i++) {
-                int priority = Integer.parseInt(st.nextToken());
-                queue.offer(new Document(i, priority));
+            Deque<int[]> deque = new ArrayDeque<>();
+            for (int j = 0; j < N; j++) {
+                deque.add(new int[]{j, Integer.parseInt(st.nextToken())});
             }
 
-            int count = 0;
-            while (!queue.isEmpty()) {
-                Document doc = queue.poll();
-                boolean isPrinted = true;
-                for (Document d : queue) {
-                    if (d.priority > doc.priority) {
-                        isPrinted = false;
-                        break;
-                    }
+            int cnt =0;
+            while(true){
+                int[] doc= deque.removeFirst();
+                if(deque.stream().anyMatch(d -> d[1]> doc[1])){
+                    deque.addLast(doc);
                 }
-                if (!isPrinted) {
-                    queue.offer(doc);
-                } else {
-                    count++;
-                    if (doc.index == M) {
-                        System.out.println(count);
+                else{
+                    cnt++;
+                    if(doc[0] == M){
+                        sb.append(cnt).append("\n");
                         break;
                     }
                 }
             }
         }
-    }
-
-    static class Document {
-        int index;
-        int priority;
-
-        public Document(int index, int priority) {
-            this.index = index;
-            this.priority = priority;
-        }
+        System.out.println(sb);
     }
 }
