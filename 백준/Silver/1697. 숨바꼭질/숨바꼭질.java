@@ -32,10 +32,11 @@ public class Main {
         {
             n = queue.remove();
 
-            if (n == K)
+             if (n == K)
             {
                 return visited[n]-1;
             }
+
 
             if (n-1>=0 && visited[n-1] == 0)
             {
