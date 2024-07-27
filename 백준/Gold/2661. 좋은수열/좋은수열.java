@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 public class Main {
     static int N;
     static int[] sequence;
-
+    static StringBuilder sb = new StringBuilder();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -17,7 +17,10 @@ public class Main {
 
     static boolean backTracking(int depth) {
         if (depth == N) {
-            printSequence();
+            for(int i=0;i<N;i++){
+                sb.append(sequence[i]);
+            }
+            System.out.println(sb);
             return true;
         }
 
@@ -46,11 +49,4 @@ public class Main {
         return true;
     }
 
-    static void printSequence() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < N; i++) {
-            sb.append(sequence[i]);
-        }
-        System.out.println(sb.toString());
-    }
 }
