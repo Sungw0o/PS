@@ -3,7 +3,8 @@ import java.util.Arrays;
 class Solution {
     public long solution(int n, int[] times) {
         Arrays.sort(times);
-        long left = 1, right = (long) n * times[times.length - 1], answer = right;
+        long left = 1, right = (long) n * times[times.length - 1];
+        long answer =0;
 
         while (left <= right) {
             long mid = (left + right) / 2;
