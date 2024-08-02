@@ -29,14 +29,17 @@ public class Main {
         for(int i = 0; i < N; i++) {
             for(int j = 0; j < N; j++) {
                 int jump = map[i][j];
-                if (jump == 0) continue;
+                
+                if (jump != 0) {
+    
+                    if (i + jump < N) {
+                            dp[i + jump][j] += dp[i][j];
+                    }
 
-                if (i + jump < N) {
-                    dp[i + jump][j] += dp[i][j];
-                }
-
-                if (j + jump < N) {
-                    dp[i][j + jump] += dp[i][j];
+    
+                    if (j + jump < N) {
+                            dp[i][j + jump] += dp[i][j];
+                        }
                 }
             }
         }
