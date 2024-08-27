@@ -1,1 +1,1 @@
-# Problem Soving 기록
+# 알고리즘
