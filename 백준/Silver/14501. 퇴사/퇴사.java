@@ -18,14 +18,13 @@ public class Main {
             money[i] = Integer.parseInt(st.nextToken());
         }
 
+
         for (int i = 0; i < N; i++) {
-            if (i + day[i] <= N) {
-                dp[i + day[i]] = Math.max(dp[i + day[i]], dp[i] + money[i]);
+            for (int j = i + day[i]; j <= N; j++) {
+                dp[j] = Math.max(dp[j], dp[i] + money[i]);
             }
-            dp[i + 1] = Math.max(dp[i + 1], dp[i]);
         }
-        
+
         System.out.println(dp[N]);
-        br.close();
     }
 }
