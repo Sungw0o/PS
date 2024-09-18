@@ -2,35 +2,47 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.StringTokenizer;
 
 public class Main {
+    static int cnt = 0;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
 
-        for (int i = 0; i < n; i++) {
-            int num = Integer.parseInt(br.readLine());
-            Map<String, Integer> clothesMap = new HashMap<>();
+        int T = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
-            for (int j = 0; j < num; j++) {
-                String[] wear = br.readLine().split(" ");
-                String type = wear[1];
-                
-                if (clothesMap.containsKey(type)) {
-                    clothesMap.put(type, clothesMap.get(type) + 1);
-                } else {
-                    clothesMap.put(type, 1);
-                }
-            }
-
-            int totalCount = 1;
-            for (int count : clothesMap.values()) {
-                totalCount *= (count + 1); 
+        for (int i = 0; i < T; i++) {
+            cnt = 0;
+            int N = Integer.parseInt(br.readLine());
+            HashMap<String, String> clothes = new HashMap<>();
+            cnt = N;
+            
+            for (int j = 0; j < N; j++) {
+                StringTokenizer st = new StringTokenizer(br.readLine());
+                clothes.put(st.nextToken(), st.nextToken());
             }
             
-            int result = totalCount - 1;
-            System.out.println(result);
+            sb.append(combination(clothes, cnt)).append("\n");
         }
+
+        System.out.print(sb);
+    }
+    
+    static int combination(HashMap<String, String> clothes, int cnt) {
+        HashMap<String, Integer> typeCount = new HashMap<>();
+        
+        for (String type : clothes.values()) {
+            typeCount.put(type, typeCount.getOrDefault(type, 0) + 1);
+        }
+
+        int result = 1;
+        
+        for (int count : typeCount.values()) {
+            result *= (count + 1);
+        }
+        
+        return result - 1;
     }
 }
