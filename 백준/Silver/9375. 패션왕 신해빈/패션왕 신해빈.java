@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int cnt = 0;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -14,23 +12,19 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < T; i++) {
-            cnt = 0;
             int N = Integer.parseInt(br.readLine());
             HashMap<String, String> clothes = new HashMap<>();
-            cnt = N;
-            
+
             for (int j = 0; j < N; j++) {
                 StringTokenizer st = new StringTokenizer(br.readLine());
                 clothes.put(st.nextToken(), st.nextToken());
             }
-            
-            sb.append(combination(clothes, cnt)).append("\n");
+            sb.append(combination(clothes)).append("\n");
         }
-
         System.out.print(sb);
     }
     
-    static int combination(HashMap<String, String> clothes, int cnt) {
+    static int combination(HashMap<String, String> clothes) {
         HashMap<String, Integer> typeCount = new HashMap<>();
         
         for (String type : clothes.values()) {
