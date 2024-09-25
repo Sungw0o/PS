@@ -2,37 +2,44 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.StringTokenizer;
 
-public class Main{
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine()); 
-		ArrayList<Integer> arrA = new ArrayList<>();
-		ArrayList<Integer> arrB = new ArrayList<>();
-		int sum = 0;
-		
-		StringTokenizer a = new StringTokenizer(br.readLine());
-		StringTokenizer b = new StringTokenizer(br.readLine());
-		
-		for(int i = 0; i<n; i++) {
-			arrA.add(Integer.parseInt(a.nextToken()));
-			arrB.add(Integer.parseInt(b.nextToken()));
-		}
-		
-		for(int i = 0; i<n; i++) {
-			int min = Collections.min(arrA);
-			int max = Collections.max(arrB);
+public class Main {
+    static int N;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-			sum += (min * max);
-			
-			arrA.remove(Integer.valueOf(min));
-			arrB.remove(Integer.valueOf(max));
-		}
-		
-		System.out.println(sum);
-		br.close();
-	}
+        N = Integer.parseInt(br.readLine());
+        ArrayList<Integer> A = new ArrayList<>();
+        ArrayList<Integer> B = new ArrayList<>();
+
+        String[] aInput = br.readLine().split(" ");
+        for (String num : aInput) {
+            A.add(Integer.parseInt(num));
+        }
+        String[] bInput = br.readLine().split(" ");
+        for (String num : bInput) {
+            B.add(Integer.parseInt(num));
+        }
+
+        System.out.println(multiArr(A,B));
+        br.close();
+
+    }
+
+    public static int multiArr(ArrayList<Integer> A, ArrayList<Integer> B){
+        int sum = 0;
+
+        for(int i=0;i<N;i++){
+            int min = Collections.min(A);
+            int max=  Collections.max(B);
+
+            sum += (min * max);
+
+            A.remove(Integer.valueOf(min));
+            B.remove(Integer.valueOf(max));
+        }
+
+        return sum;
+    }
 }
