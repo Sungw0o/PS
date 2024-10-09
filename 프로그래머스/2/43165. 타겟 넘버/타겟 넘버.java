@@ -1,19 +1,27 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 class Solution {
-    public int answer = 0; 
-
     public int solution(int[] numbers, int target) {
-        dfs(numbers, 0, target, 0); 
-        return answer;
-    }
+        int answer = 0;
+        Queue<int[]> q = new LinkedList<>(); 
+        q.offer(new int[]{0, 0});
 
-    public void dfs(int[] numbers, int depth, int target, int sum) {
-        if (depth == numbers.length) {
-            if (target == sum) {
-                answer++;
+        while (!q.isEmpty()) {
+            int[] current = q.poll();
+            int depth = current[0];
+            int value = current[1];
+
+            
+            if (depth == numbers.length) {
+                if (value == target) {
+                    answer++;
+                }
+            } else {
+                q.offer(new int[]{depth + 1, value + numbers[depth]});
+                q.offer(new int[]{depth + 1, value - numbers[depth]});
             }
-            return;
         }
-        dfs(numbers, depth + 1, target, sum + numbers[depth]);
-        dfs(numbers, depth + 1, target, sum - numbers[depth]);
+        return answer;
     }
 }
