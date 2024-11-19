@@ -17,8 +17,12 @@ public class Main {
         for(int i = 4; i <= N; i++) {
             dp[i] = Math.min(dp[i-1], dp[i-3])+1;
         }
-        System.out.println(dp[N] % 2 == 0 ? "CY": "SK");
-
+        if(dp[N] % 2 == 0){
+            System.out.println("CY");
+        }else{
+            System.out.println("SK");
+        }
+        
         br.close();
     }
 }
