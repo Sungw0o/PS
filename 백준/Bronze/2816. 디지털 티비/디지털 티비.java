@@ -15,31 +15,33 @@ public class Main {
             channel[i] = br.readLine();
         }
 
-        int pointer = 0;
+        int arrowPos = 0;
 
         int kbs1Pos = findChannel(channel, "KBS1");
-        while (pointer < kbs1Pos) {
+
+        while (arrowPos < kbs1Pos) {
             sb.append("1");
-            pointer++;
+            arrowPos++;
         }
-        while (pointer > 0) {
+        while (arrowPos > 0) {
             sb.append("4");
-            swap(channel, pointer, pointer - 1);
-            pointer--;
+            swap(channel, arrowPos, arrowPos - 1);
+            arrowPos--;
         }
 
         int kbs2Pos = findChannel(channel, "KBS2");
-        while (pointer < kbs2Pos) {
+        while (arrowPos < kbs2Pos) {
             sb.append("1");
-            pointer++;
+            arrowPos++;
         }
-        while (pointer > 1) {
+        while (arrowPos > 1) {
             sb.append("4");
-            swap(channel, pointer, pointer - 1);
-            pointer--;
+            swap(channel, arrowPos, arrowPos - 1);
+            arrowPos--;
         }
 
-        System.out.println(sb.toString());
+        System.out.println(sb);
+        br.close();
     }
 
     public static int findChannel(String[] channel, String target) {
