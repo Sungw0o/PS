@@ -23,21 +23,26 @@ class Solution {
         int operations = 0;
 
         while (operations < maxOperations) {
-            if (sum1 == targetSum) return operations;
+            if (targetReach(sum1, sum2, targetSum)) return operations;
 
             if (sum1 > targetSum) {
                 int removed = q1.poll(); 
                 sum1 -= removed;
                 q2.offer(removed); 
+                sum2 += removed;
             } else {
                 int removed = q2.poll(); 
                 sum2 -= removed;
                 q1.offer(removed); 
-                sum1 += removed;
+                sum1 += removed; 
             }
             operations++;
         }
 
         return -1; 
+    }
+    
+    private boolean targetReach(long sum1, long sum2, long targetSum) {
+        return sum1 == targetSum && sum2 == targetSum;
     }
 }
