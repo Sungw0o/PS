@@ -6,8 +6,11 @@ class Solution {
     public int solution(int k, int n, int[][] reqs) {
         List<Mentee> mentees = initializeMentees(reqs);
 
-        int[] mentors = new int[k];
-        Arrays.fill(mentors, 1); 
+        Mentor[] mentors = new Mentor[k];
+        for (int i = 0; i < k; i++) {
+            mentors[i] = new Mentor(i, 1); 
+        }
+
         n -= k; 
         backtrack(mentors, mentees, n, 0);
 
@@ -22,7 +25,7 @@ class Solution {
         return mentees;
     }
 
-    private void backtrack(int[] mentors, List<Mentee> mentees, int remaining, int index) {
+    private void backtrack(Mentor[] mentors, List<Mentee> mentees, int remaining, int index) {
         if (index == mentors.length) {
             if (remaining == 0) {
                 int waitTime = calculateWaitTime(mentors, mentees);
@@ -32,32 +35,24 @@ class Solution {
         }
 
         for (int i = 0; i <= remaining; i++) {
-            mentors[index] += i;
+            mentors[index].addMentors(i);
             backtrack(mentors, mentees, remaining - i, index + 1);
-            mentors[index] -= i;
+            mentors[index].removeMentors(i);
         }
     }
 
-    private int calculateWaitTime(int[] mentors, List<Mentee> mentees) {
-        PriorityQueue<Integer>[] mentorQueues = new PriorityQueue[mentors.length];
-        for (int i = 0; i < mentors.length; i++) {
-            mentorQueues[i] = new PriorityQueue<>();
-            for (int j = 0; j < mentors[i]; j++) {
-                mentorQueues[i].add(0);
-            }
+    private int calculateWaitTime(Mentor[] mentors, List<Mentee> mentees) {
+        for (Mentor mentor : mentors) {
+            mentor.resetQueue();
         }
 
         int totalWaitTime = 0;
 
         for (Mentee mentee : mentees) {
-            int category = mentee.category;
-            PriorityQueue<Integer> queue = mentorQueues[category];
+            Mentor mentor = mentors[mentee.category];
 
-            int earliestEndTime = queue.poll();
-            int waitTime = Math.max(0, earliestEndTime - mentee.sTime);
+            int waitTime = mentor.assignMentee(mentee.sTime, mentee.eTime);
             totalWaitTime += waitTime;
-
-            queue.add(Math.max(earliestEndTime, mentee.sTime) + mentee.eTime);
         }
 
         return totalWaitTime;
@@ -72,6 +67,49 @@ class Solution {
             this.sTime = sTime;
             this.eTime = eTime;
             this.category = category;
+        }
+    }
+
+    static class Mentor {
+        int category;
+        int count;
+        PriorityQueue<Integer> queue;
+
+        public Mentor(int category, int count) {
+            this.category = category;
+            this.count = count;
+            this.queue = new PriorityQueue<>();
+            for (int i = 0; i < count; i++) {
+                queue.add(0);
+            }
+        }
+
+        public void addMentors(int additionalCount) {
+            for (int i = 0; i < additionalCount; i++) {
+                queue.add(0);
+            }
+            count += additionalCount;
+        }
+
+        public void removeMentors(int countToRemove) {
+            count -= countToRemove;
+            for (int i = 0; i < countToRemove; i++) {
+                queue.poll();
+            }
+        }
+
+        public void resetQueue() {
+            queue.clear();
+            for (int i = 0; i < count; i++) {
+                queue.add(0);
+            }
+        }
+
+        public int assignMentee(int sTime, int eTime) {
+            int earliestEndTime = queue.poll();
+            int waitTime = Math.max(0, earliestEndTime - sTime);
+            queue.add(Math.max(earliestEndTime, sTime) + eTime);
+            return waitTime;
         }
     }
 }
