@@ -3,30 +3,31 @@ import java.util.*;
 class Solution {
     public int solution(String[] friends, String[] gifts) {
         int friendsNum = friends.length;
-        HashMap<String, Integer> friendIndexMap = buildFriendIndexMap(friends);
+        HashMap<String, Integer> friendMap = buildFriendMap(friends);
+        
         int[][] giftCount = new int[friendsNum][friendsNum];
         int[] giftScore = new int[friendsNum];
 
-        processGifts(gifts, friendIndexMap, giftCount, giftScore);
+        exchangeGifts(gifts, friendMap, giftCount, giftScore);
 
         return calculateMaxGifts(friendsNum, giftCount, giftScore);
     }
 
-    private HashMap<String, Integer> buildFriendIndexMap(String[] friends) {
-        HashMap<String, Integer> friendIndexMap = new HashMap<>();
+    private HashMap<String, Integer> buildFriendMap(String[] friends) {
+        HashMap<String, Integer> friendMap = new HashMap<>();
         for (int i = 0; i < friends.length; i++) {
-            friendIndexMap.put(friends[i], i);
+            friendMap.put(friends[i], i);
         }
-        return friendIndexMap;
+        return friendMap;
     }
 
-    private void processGifts(String[] gifts, HashMap<String, Integer> friendIndexMap, int[][] giftCount, int[] giftScore) {
+    private void exchangeGifts(String[] gifts, HashMap<String, Integer> friendMap, int[][] giftCount, int[] giftScore) {
         for (String gift : gifts) {
             String[] parts = gift.split(" ");
             String from = parts[0];
             String to = parts[1];
-            int fromIdx = friendIndexMap.get(from);
-            int toIdx = friendIndexMap.get(to);
+            int fromIdx = friendMap.get(from);
+            int toIdx = friendMap.get(to);
             
             giftCount[fromIdx][toIdx]++;
             giftScore[fromIdx]++;
