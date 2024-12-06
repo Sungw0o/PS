@@ -2,8 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static ArrayList<Integer>[] cities;
-    static boolean[] visited;
+    private static ArrayList<Integer>[] cities;
+    private static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,15 +28,15 @@ public class Main {
         }
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] plan = new int[M];
+        int[] travelplan = new int[M];
         for (int i = 0; i < M; i++) {
-            plan[i] = Integer.parseInt(st.nextToken());
+            travelplan[i] = Integer.parseInt(st.nextToken());
         }
 
-        dfs(plan[0]);
+        dfs(travelplan[0]);
 
         boolean possible = true;
-        for (int city : plan) {
+        for (int city : travelplan) {
             if (!visited[city]) {
                 possible = false;
                 break;
