@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
+
 public class Main {
     private static final String YUT_NO_RI = "Y";
     private static final String FIND_THE_SAME_PICTURE = "F";
@@ -28,22 +29,11 @@ public class Main {
     }
 
     public static int gameCount(String gameType, HashSet<String> nameList) {
-        int playersPerGame;
-
-        switch (gameType) {
-            case YUT_NO_RI:
-                playersPerGame = 1;
-                break;
-            case FIND_THE_SAME_PICTURE:
-                playersPerGame = 2;
-                break;
-            case ONE_CARD:
-                playersPerGame = 3;
-                break;
-            default:
-                throw new IllegalArgumentException("유효하지 않은 게임입니다.");
-        }
-
-        return nameList.size() / playersPerGame;
+        return switch (gameType) {
+            case YUT_NO_RI -> nameList.size() / 1;
+            case FIND_THE_SAME_PICTURE -> nameList.size() / 2;
+            case ONE_CARD -> nameList.size() / 3;
+            default -> throw new IllegalArgumentException("유효하지 않은 게임입니다.");
+        };
     }
 }
