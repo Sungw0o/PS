@@ -1,23 +1,41 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        StringBuilder sb = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int t = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        Stack<Character> stack = new Stack<>();
 
-        for (int i = 0; i < t; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            while (st.hasMoreTokens()) {
-                String word = st.nextToken();
-                sb.append(new StringBuilder(word).reverse()).append(" ");
+        int T = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i < T; i++) {
+            char[] input = br.readLine().toCharArray();
+            for (char c : input) {
+                if(c== ' '){
+                    while(!stack.isEmpty()){
+                        sb.append(stack.pop());
+                    }
+                    sb.append(' ');
+                }
+                else{
+                    stack.push(c);
+                }
+
             }
-            sb.append("\n");
+
+            while(!stack.isEmpty()){
+                sb.append(stack.pop());
+            }
+            sb.append('\n');
         }
 
+
+
         System.out.println(sb);
+        br.close();
     }
 }
