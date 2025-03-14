@@ -1,27 +1,20 @@
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Deque;
-import java.util.ArrayDeque;
+
 
 class Solution {
         public int[] solution(int[] prices) {
-            int n = prices.length;
-            int[] answer = new int[n];
-            Deque<Integer> deque = new ArrayDeque<>();
+    int[] answer = new int[prices.length];
 
-            for (int i = 0; i < n; i++) {
-                while (!deque.isEmpty() && prices[deque.peekLast()] > prices[i]) {
-                    int index = deque.pollLast();
-                    answer[index] = i - index;
-                }
-                deque.offerLast(i);
+    for (int i = 0; i < prices.length; i++) {
+        int time = 0;
+        for (int j = i + 1; j < prices.length; j++) {
+            time++;
+            if (prices[j] < prices[i]) {
+                break;
             }
-
-            while (!deque.isEmpty()) {
-                int index = deque.pollLast();
-                answer[index] = n - index - 1;
-            }
-
-            return answer;
         }
+        answer[i] = time;
     }
+        
+    return answer;
+        }
+}
