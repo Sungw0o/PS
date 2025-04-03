@@ -9,10 +9,10 @@ public class Main {
     private static boolean[][] isVisited;
     
     public static void main(String[] args) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder builder = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
         boolean isStartChecked = false;
-        String[] size = reader.readLine().split(" ");
+        String[] size = br.readLine().split(" ");
         n = Integer.parseInt(size[0]);
         m = Integer.parseInt(size[1]);
         int startX = -1, startY = -1;
@@ -22,7 +22,7 @@ public class Main {
         isVisited = new boolean[n][m];
         
         for (int i = 0; i < n; i++) {
-            map[i] = Arrays.stream(reader.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            map[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
             if (!isStartChecked) 
                 for (int j = 0; j < m; j++) 
                     if (map[i][j] == 2) {
@@ -38,13 +38,14 @@ public class Main {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) 
                 if (!isVisited[i][j] && map[i][j] == 1)
-                    builder.append(-1 + " ");
+                    sb.append(-1 + " ");
                 else 
-                    builder.append(distance[i][j] + " ");
-            builder.append("\n");
+                    sb.append(distance[i][j] + " ");
+            sb.append("\n");
         }
         
-        System.out.print(builder.toString());
+        System.out.print(sb.toString());
+        br.close();
     }
     
     private static void bfs(int x, int y) {
