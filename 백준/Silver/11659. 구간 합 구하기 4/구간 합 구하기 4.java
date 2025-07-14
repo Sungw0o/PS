@@ -1,26 +1,29 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        StringBuilder sb = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] nm = br.readLine().split(" ");
-        int n = Integer.parseInt(nm[0]);
-        int m = Integer.parseInt(nm[1]);
-        int[] arr = new int[n];
-        int[] prefixSum = new int[n + 1]; 
-        String[] num = br.readLine().split(" ");
-        for(int i = 0; i < n; i++){
-            arr[i] = Integer.parseInt(num[i]);
-            prefixSum[i + 1] = prefixSum[i] + arr[i];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        int[] prefixSum = new int[N + 1];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 1; i <= N; i++) {
+            prefixSum[i] = prefixSum[i - 1] + Integer.parseInt(st.nextToken());
         }
-        for(int k = 0; k < m; k++){
-            String[] ij = br.readLine().split(" ");
-            int i = Integer.parseInt(ij[0]) - 1; 
-            int j = Integer.parseInt(ij[1]) - 1; 
-            int sum = prefixSum[j + 1] - prefixSum[i]; 
-            sb.append(sum).append('\n');
+
+        StringBuilder sb = new StringBuilder();
+        for (int q = 0; q < M; q++) {
+            st = new StringTokenizer(br.readLine());
+            int i = Integer.parseInt(st.nextToken());
+            int j = Integer.parseInt(st.nextToken());
+            sb.append(prefixSum[j] - prefixSum[i - 1]).append("\n");
         }
-        System.out.println(sb);
+
+        System.out.print(sb);
+        br.close();
     }
 }
