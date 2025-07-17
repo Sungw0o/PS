@@ -39,7 +39,7 @@ public class Main {
             sb.append(num).append(' ');
         }
         
-        System.out.println(sb.toString().trim());
+        System.out.println(sb);
         br.close();
     }
 }
