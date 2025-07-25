@@ -1,45 +1,43 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
-public class n9663 {
-    static int N;
-    static int[][] map;
-    static int cnt = 0;
+public class Main {
+    private static int[] queens; 
+    private static int count = 0;
+    private static int N;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
 
-        map = new int[N][N];
-
-        placeQueen(0);
-        System.out.println(cnt);
+        queens = new int[N]; 
+        dfs(0);
+        System.out.println(count);
         br.close();
     }
 
-    public static void placeQueen(int x) {
-        if (x == N) {
-            cnt++;
+    static void dfs(int row) {
+        if (row == N) {
+            count++;
             return;
         }
 
-        for (int y = 0; y < N; y++) {
-            if (isattack(y, x)) {
-                map[y][x] = 1;
-                placeQueen(x + 1);
-                map[y][x] = 0;
+        for (int col = 0; col < N; col++) {
+            if (isSafe(row, col)) {
+                queens[row] = col; 
+                dfs(row + 1);    
             }
         }
     }
-
-    public static boolean isattack(int y, int x) {
-        for (int i = 0; i < x; i++) {
-            if (map[y][i] == 1) return false;
-            if (y - (x - i) >= 0 && map[y - (x - i)][i] == 1) return false;
-            if (y + (x - i) < N && map[y + (x - i)][i] == 1) return false;
+    
+    static boolean isSafe(int row, int col) {
+        for (int i = 0; i < row; i++) {
+            if (queens[i] == col) return false;
+            
+            if (Math.abs(row - i) == Math.abs(col - queens[i])) return false;
         }
-
         return true;
     }
 }
