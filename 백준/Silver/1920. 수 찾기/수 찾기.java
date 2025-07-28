@@ -1,51 +1,34 @@
-
-
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        Scanner s = new Scanner(System.in);
-        
-        int n = s.nextInt();
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[i] = s.nextInt();
-        }
-        
-        Arrays.sort(arr); 
-        
-        int k = s.nextInt();
-        for (int j = 0; j < k; j++) {
-            int target = s.nextInt();
-            boolean found = binarySearch(arr, target); 
-            if (found)
-                sb.append("1\n");
-            else
-                sb.append("0\n");
-        }
-        
-        System.out.println(sb);
-        s.close();
-    }
-    
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    private static boolean binarySearch(int[] arr, int target) {
-        int left = 0;
-        int right = arr.length - 1;
-        
-        while (left <= right) {
-            int mid = (left + right) / 2;
-            if (arr[mid] == target)
-                return true;
-            else if (arr[mid] < target)
-                left = mid + 1;
-            else
-                right = mid - 1;
+        int N = Integer.parseInt(br.readLine());
+        HashSet<Integer> set = new HashSet<>();
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            set.add(Integer.parseInt(st.nextToken()));
         }
-        
-        return false;
+
+        int M = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < M; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            if (set.contains(num)) {
+                sb.append("1\n");
+            } else {
+                sb.append("0\n");
+            }
+        }
+
+        System.out.print(sb);
+        br.close();
     }
 }
