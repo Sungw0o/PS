@@ -6,64 +6,64 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-    static char[][] maze;
-    static boolean[][] visited;
-    static int count = 0;
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
-
-    public static void main(String[] args) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-
-        maze = new char[N][M];
-        visited = new boolean[N][M];
-
-        for (int i = 0; i < N; i++) {
-            maze[i] = br.readLine().toCharArray();
-        }
-        bfs(N,M);
-
-
-        sb.append(count);
-        System.out.println(sb);
-
-
-
-    }
-
-    private static void bfs(int N, int M) {
-        Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[]{0, 0});
-        visited[0][0] = true;
-        count = 1;
-
-        while (!q.isEmpty()) {
-            int size = q.size();
-            for (int i = 0; i < size; i++) {
-                int[] curr = q.poll();
-                int x = curr[0];
-                int y = curr[1];
-
-                if (x == N - 1 && y == M - 1) {
-                    return;
-                }
-
-                for (int j = 0; j < 4; j++) {
-                    int nx = x + dx[j];
-                    int ny = y + dy[j];
-
-                    if (nx >= 0 && nx < N && ny >= 0 && ny < M && maze[nx][ny] == '1' && !visited[nx][ny]) {
-                        q.offer(new int[]{nx, ny});
-                        visited[nx][ny] = true;
-                    }
-                }
-            }
-            count++;
-        }
-    }
+	
+	private static int[][] maze;
+	private static boolean[][] visited;
+	private static int cnt = 0;
+	private static final int[] dr = {-1,1,0,0};
+	private static final int[] dc = {0,0,-1,1};
+	private static int N,M;
+	
+	public static void main(String[] args) throws IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		
+		maze = new int[N][M];
+		visited = new boolean[N][M];
+		
+		for(int i = 0; i<N ; i++) {
+			String line = br.readLine();
+			for(int j = 0; j < M; j++) {
+				maze[i][j] = line.charAt(j) - '0';
+			}
+		}
+		
+		bfs(0,0);
+		System.out.println(maze[N-1][M-1]);
+		br.close();
+		
+	}
+	
+	public static void bfs(int sR,int sC) {
+		
+		Queue<int[]> queue = new LinkedList<>();
+		
+		queue.offer(new int[] {sR,sC});
+		visited[sR][sC] = true;
+		
+		while(!queue.isEmpty()) {
+			
+			int[] curr =queue.poll();
+			int r = curr[0];
+			int c = curr[1];
+			
+			for(int i = 0; i< 4;i++) {
+				int nr = r + dr[i];
+				int nc = c + dc[i];
+				
+				if(nr>= 0 && nr < N && nc >= 0 && nc < M) {
+					if(maze[nr][nc] == 1 && !visited[nr][nc]) {
+						visited[nr][nc] = true;
+						maze[nr][nc] = maze[r][c] + 1; 
+	                    queue.offer(new int[] {nr, nc});
+					}
+				}
+			}			
+		}
+	}
 }
