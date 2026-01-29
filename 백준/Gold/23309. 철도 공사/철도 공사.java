@@ -1,93 +1,128 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int[] prev = new int[1000001];
-	static int[] next = new int[1000001];
+	private static Station[] stations = new Station[1000001];
 
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		
 		StringBuilder sb = new StringBuilder();
 		
 		StringTokenizer st = new StringTokenizer(br.readLine());
+		
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 		
 		st = new StringTokenizer(br.readLine());
 		
-		int firstSt = Integer.parseInt(st.nextToken());
-		int currentSt = firstSt;
+
+		Station head = null;
+		Station tail = null;
 		
-		for(int i = 1; i < N; i++) {
-			int nextSt = Integer.parseInt(st.nextToken());
+		for(int i = 0; i< N;i++)
+		{
+			int stNum = Integer.parseInt(st.nextToken());
 			
-			next[currentSt] = nextSt;
-			prev[nextSt] = currentSt;
+			Station station = new Station(stNum);
+			stations[stNum] = station;
 			
-			currentSt = nextSt;
-		}
-		
-		next[currentSt] = firstSt;
-		prev[firstSt] = currentSt;
-		
-		for(int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
-			String cmd = st.nextToken();
-			int cur = Integer.parseInt(st.nextToken());
+			if(head == null) {
+				head = station;
+				tail = station;
+			}
 			
-			switch (cmd) {
-				case "BN":
-					int newStBN = Integer.parseInt(st.nextToken());
-					int nextNode = next[cur];
-					sb.append(nextNode).append("\n");
-					
-					prev[newStBN] = cur;
-					next[newStBN] = nextNode;
-					next[cur] = newStBN;
-					prev[nextNode] = newStBN;
-					break;
-					
-				case "BP":
-					int newStBP = Integer.parseInt(st.nextToken());
-					int prevNode = prev[cur];
-					sb.append(prevNode).append("\n");
-					
-					prev[newStBP] = prevNode;
-					next[newStBP] = cur;
-					next[prevNode] = newStBP;
-					prev[cur] = newStBP;
-					break;
-					
-				case "CN":
-					int targetN = next[cur];
-					sb.append(targetN).append("\n");
-					
-					int nnNode = next[targetN];
-					next[cur] = nnNode;
-					prev[nnNode] = cur;
-					break;
-					
-				case "CP":
-					int targetP = prev[cur];
-					sb.append(targetP).append("\n");
-					
-					int ppNode = prev[targetP];
-					next[ppNode] = cur;
-					prev[cur] = ppNode;
-					break;
+			else {
+				tail.next = station;
+				station.prev = tail;
+				tail = station;
 			}
 		}
 		
-		bw.write(sb.toString());
-		bw.flush();
-		bw.close();
+		if (tail != null && head != null) {
+            tail.next = head;
+            head.prev = tail;
+        }
+		
+		for(int i = 0; i < M ; i++) {
+			st = new StringTokenizer(br.readLine());
+			String cmd = st.nextToken();
+			int stNum = Integer.parseInt(st.nextToken());
+			int newStNum = 0;
+			
+			Station cur = stations[stNum];
+			
+			switch (cmd) {
+				
+				case "BN":
+					newStNum = Integer.parseInt(st.nextToken());
+					sb.append(cur.next.num).append("\n");
+					Station next = cur.next;
+					Station newNext = new Station(newStNum);
+					
+					stations[newStNum] = newNext;
+                    
+                    cur.next = newNext;
+                    newNext.prev = cur;
+                    newNext.next = next;
+                    next.prev = newNext;
+                    break;
+					
+				case "BP":
+					newStNum = Integer.parseInt(st.nextToken());
+					sb.append(cur.prev.num).append("\n");
+					Station prev = cur.prev;
+					Station newPrev = new Station(newStNum);
+					
+					stations[newStNum] = newPrev;
+                    
+                    cur.prev = newPrev;
+                    newPrev.next = cur;
+                    newPrev.prev = prev;
+                    prev.next = newPrev;
+                    break;
+                    
+				case "CP":
+                    Station targetPrev = cur.prev;
+                    sb.append(targetPrev.num).append("\n");
+                    
+                    Station pullSt2 = targetPrev.prev;
+                    cur.prev = pullSt2;
+                    pullSt2.next = cur;
+                    
+                    stations[targetPrev.num] = null; 
+                    break;
+                    
+				case "CN":
+					Station targetNext = cur.next;
+                    sb.append(targetNext.num).append("\n");
+                    
+                    Station pullSt = targetNext.next;
+                    cur.next = pullSt;
+                    pullSt.prev = cur;
+                    
+                    stations[targetNext.num] = null; 
+                    break;
+			}
+		}
+		
+		System.out.println(sb);
 		br.close();
+	}
+	
+	static class Station{
+		
+		int num;
+		public Station prev;
+		public Station next;
+		
+		public Station(int num) {
+			this.num = num;
+		}
 	}
 }
