@@ -1,38 +1,44 @@
-
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 public class Main {
+    private static int N, M;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
         StringBuilder sb = new StringBuilder();
-        HashMap<String, Integer> nameToIndex = new HashMap<>();
-        HashMap<Integer, String> indexToName = new HashMap();
 
-        String s = br.readLine();
-        String[] nm = s.split(" ");
-        int n = Integer.parseInt(nm[0]);
-        int m = Integer.parseInt(nm[1]);
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        for (int i = 1; i <= n; i++) {
-            String val = br.readLine();
-            nameToIndex.put(val, i);
-            indexToName.put(i, val);
+        HashMap<Integer, String> book1 = new HashMap<>();
+        HashMap<String, Integer> book2 = new HashMap<>();
+
+        for (int i = 1; i <= N; i++) {
+            String s = br.readLine();
+            book1.put(i, s);
+            book2.put(s, i);
         }
 
-        for (int i = 0; i < m; i++) {
-            String query = br.readLine();
-            if (Character.isDigit(query.charAt(0))) {
-                // 숫자로 시작하는 경우, 번호로 이름 찾기
-                int index = Integer.parseInt(query);
-                System.out.println(indexToName.get(index));
+        for (int i = 1; i <= M; i++) {
+            String s = br.readLine();
+            if (s.charAt(0) >= '0' && s.charAt(0) <= '9') {
+                sb.append(book1.get(Integer.parseInt(s))).append('\n');
             } else {
-                // 문자로 시작하는 경우, 이름으로 번호 찾기
-                System.out.println(nameToIndex.get(query));
+                sb.append(book2.get(s)).append('\n');
             }
         }
 
+        bw.write(sb.toString());
+        bw.flush();
+        bw.close();
         br.close();
     }
 }
