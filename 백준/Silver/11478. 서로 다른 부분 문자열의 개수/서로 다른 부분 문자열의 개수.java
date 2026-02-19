@@ -1,24 +1,30 @@
-
-
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.HashSet;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String s = br.readLine();
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
 
-        HashSet<String> substrings = new HashSet<>();
+        String s = br.readLine();
+        HashSet<String> set = new HashSet<>();
 
         for (int i = 0; i < s.length(); i++) {
             for (int j = i + 1; j <= s.length(); j++) {
-                String substring = s.substring(i, j);
-                substrings.add(substring);
+                set.add(s.substring(i, j));
             }
         }
 
-        System.out.println(substrings.size());
+        sb.append(set.size());
+        bw.write(sb.toString());
 
+        bw.flush();
+        bw.close();
         br.close();
     }
 }
