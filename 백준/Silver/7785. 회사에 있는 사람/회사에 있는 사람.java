@@ -1,31 +1,35 @@
-
-import java.io.*;
-import java.util.Collections;
-import java.util.TreeSet;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class Main {
+
+    private static int N;
+
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        TreeSet<String> set = new TreeSet<>((s1, s2) -> s2.compareTo(s1)); // 역순으로 정렬
 
-        int n = Integer.parseInt(br.readLine());
+        BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < n; i++) {
-            String entry = br.readLine();
+        N = Integer.parseInt(br.readLine());
 
-            // "enter" 명령인 경우 TreeSet에 추가, "leave" 명령인 경우 TreeSet에서 제거
-            if (entry.contains("enter")) {
-                set.add(entry.split(" ")[0]);
-            } else if (entry.contains("leave")) {
-                set.remove(entry.split(" ")[0]);
+        TreeMap<String,String> map = new TreeMap<>(Collections.reverseOrder());
+        for (int i = 0; i < N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            map.put(st.nextToken(), st.nextToken());
+        }
+
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (entry.getValue().equals("enter")) {
+                sb.append(entry.getKey()).append("\n");
             }
         }
 
-        // TreeSet의 요소를 출력 (역순으로 정렬되어 있음)
-        for (String name : set) {
-            System.out.println(name);
-        }
-
+        // 최종 출력
+        System.out.print(sb);
         br.close();
+
     }
 }
