@@ -3,73 +3,81 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    static int N;
-    static char[][] map;
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
-    static boolean[][] visited;
-    static int normalCnt = 0;
-    static int colorBlindCnt = 0;
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
-        map = new char[N][N];
-        visited = new boolean[N][N];
-
-        for (int i = 0; i < N; i++) {
-            map[i] = br.readLine().toCharArray();
-        }
-        
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (!visited[i][j]) {
-                    normalCnt++;
-                    dfs(i, j, false);
-                }
-            }
-        }
-        
-        clearVisited();
-        
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (!visited[i][j]) {
-                    colorBlindCnt++;
-                    dfs(i, j, true);
-                }
-            }
-        }
-
-        System.out.println(normalCnt + " " + colorBlindCnt);
-        br.close();
-    }
-
-    public static void dfs(int x, int y, boolean isColorBlind) {
-        visited[x][y] = true;
-        char currentColor = map[x][y];
-
-        for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-
-            if (nx >= 0 && nx < N && ny >= 0 && ny < N && !visited[nx][ny]) {
-                if (isColorBlind && (currentColor == 'R' || currentColor == 'G')) {
-                    if (map[nx][ny] == 'R' || map[nx][ny] == 'G') {
-                        dfs(nx, ny, isColorBlind);
-                    }
-                } else if (map[nx][ny] == currentColor) {
-                    dfs(nx, ny, isColorBlind);
-                }
-            }
-        }
-    }
-
-    public static void clearVisited() {
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                visited[i][j] = false;
-            }
-        }
-    }
+	
+	private static int N;
+	
+	private static final int[] dr = {-1,1,0,0};
+	private static final int[] dc = {0,0,-1,1};
+	
+	private static char[][] arr;
+	private static boolean[][] visited;
+	
+	
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		N = Integer.parseInt(br.readLine());
+		
+		arr = new char[N][N];
+		visited = new boolean[N][N];
+		
+		for(int i = 0; i < N ; i++) {
+			arr[i] = br.readLine().toCharArray();
+		}
+		
+		int normalCount = 0;
+		for(int i = 0; i < N; i++) {
+			for(int j = 0; j < N; j++) {
+				if(!visited[i][j]) {
+					dfs(i, j, arr[i][j]); 
+					normalCount++;
+				}
+			}
+		}
+		
+		for(int i = 0; i < N; i++) {
+			for(int j = 0; j < N; j++) {
+				if(arr[i][j] == 'G') {
+					arr[i][j] = 'R';
+				}
+			}
+		}
+		
+		visited = new boolean[N][N];
+		
+		int blindCount = 0;
+		for(int i = 0; i < N; i++) {
+			for(int j = 0; j < N; j++) {
+				if(!visited[i][j]) {
+					dfs(i, j, arr[i][j]); 
+					blindCount++;
+				}
+			}
+		}
+		
+		System.out.println(normalCount + " " + blindCount);
+		br.close();
+	}
+	
+	
+	public static void dfs(int x, int y, char targetColor) {
+		
+		visited[x][y] = true;
+		
+		for(int i = 0; i < 4; i++) {
+			int tr = x + dr[i];
+			int tc = y + dc[i];
+			
+			if(rangeCheck(tr, tc) && !visited[tr][tc]) {
+				if(arr[tr][tc] == targetColor) {
+					dfs(tr, tc, targetColor);
+				}
+			}
+		}
+	}
+	
+	public static boolean rangeCheck(int x, int y) {
+		return x >= 0 && x < N && y >= 0 && y < N;
+	}
+	
 }
