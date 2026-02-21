@@ -1,35 +1,25 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.InputStream;
 
 public class Main {
-    private static int R, C, M, sum;
+    private static int[] sR, sC, sSpeed, sDir, sSize;
+    private static int[] map, nextMap;
 
-    private static int[][] arr;
-    private static int[][] tempArr;
+    public static void main(String[] args) throws Exception {
+        int R = read();
+        int C = read();
+        int M = read();
 
-    private static int[] sR;
-    private static int[] sC;
-    private static int[] sSpeed;
-    private static int[] sDir;
-    private static int[] sSize;
+        if (M == 0) {
+            System.out.print(0);
+            return;
+        }
 
-    public static void main(String[] args) throws IOException {
+        int R_cycle = (R - 1) << 1;
+        int C_cycle = (C - 1) << 1;
+        int totalCells = R * C;
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
-        StringTokenizer st = new StringTokenizer(br.readLine());
-
-        R = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-
-        sum = 0;
-
-        arr = new int[R + 1][C + 1];
-        tempArr = new int[R + 1][C + 1];
+        map = new int[totalCells];
+        nextMap = new int[totalCells];
 
         sR = new int[M + 1];
         sC = new int[M + 1];
@@ -38,32 +28,32 @@ public class Main {
         sSize = new int[M + 1];
 
         for (int i = 1; i <= M; i++) {
-            st = new StringTokenizer(br.readLine());
+            sR[i] = read() - 1;
+            sC[i] = read() - 1;
+            sSpeed[i] = read();
+            sDir[i] = read();
+            sSize[i] = read();
 
-            sR[i] = Integer.parseInt(st.nextToken());
-            sC[i] = Integer.parseInt(st.nextToken());
-            sSpeed[i] = Integer.parseInt(st.nextToken());
-            sDir[i] = Integer.parseInt(st.nextToken());
-            sSize[i] = Integer.parseInt(st.nextToken());
-
-            arr[sR[i]][sC[i]] = i;
-        }
-
-        for (int i = 1; i <= C; i++) {
-
-            for (int j = 1; j <= R; j++) {
-                if (arr[j][i] != 0) {
-                    int id = arr[j][i];
-                    sum += sSize[id];
-                    sSize[id] = 0;
-                    arr[j][i] = 0;
-                    break;
-                }
+            if (sDir[i] <= 2) {
+                sSpeed[i] %= R_cycle;
+            } else {
+                sSpeed[i] %= C_cycle;
             }
 
-            for (int j = 1; j <= R; j++) {
-                for (int k = 1; k <= C; k++) {
-                    tempArr[j][k] = 0;
+            map[sR[i] * C + sC[i]] = i;
+        }
+
+        int sum = 0;
+
+        for (int i = 0; i < C; i++) {
+            for (int j = 0; j < R; j++) {
+                int pos = j * C + i;
+                if (map[pos] != 0) {
+                    int id = map[pos];
+                    sum += sSize[id];
+                    sSize[id] = 0;
+                    map[pos] = 0;
+                    break;
                 }
             }
 
@@ -75,48 +65,61 @@ public class Main {
                 int s = sSpeed[id];
                 int d = sDir[id];
 
-                if (d == 1 || d == 2) {
-                    int move = s % ((R - 1) * 2);
-                    for (int k = 0; k < move; k++) {
-                        if (r == 1) d = 2;
-                        else if (r == R) d = 1;
-                        r += (d == 1) ? -1 : 1;
+                if (d <= 2) {
+                    int p = (d == 1) ? (R_cycle - r + s) : (r + s);
+                    p %= R_cycle;
+                    if (p >= R) {
+                        r = R_cycle - p;
+                        d = 1;
+                    } else {
+                        r = p;
+                        d = 2;
                     }
-                }
-                else {
-                    int move = s % ((C - 1) * 2);
-                    for (int k = 0; k < move; k++) {
-                        if (c == 1) d = 3;
-                        else if (c == C) d = 4;
-                        c += (d == 3) ? 1 : -1;
-                    }
-                }
-
-                sR[id] = r;
-                sC[id] = c;
-                sDir[id] = d;
-
-                if (tempArr[r][c] == 0) {
-                    tempArr[r][c] = id;
+                    sR[id] = r;
+                    sDir[id] = d;
                 } else {
-                    int existId = tempArr[r][c];
+                    int p = (d == 4) ? (C_cycle - c + s) : (c + s);
+                    p %= C_cycle;
+                    if (p >= C) {
+                        c = C_cycle - p;
+                        d = 4;
+                    } else {
+                        c = p;
+                        d = 3;
+                    }
+                    sC[id] = c;
+                    sDir[id] = d;
+                }
+
+                int pos = r * C + c;
+                if (nextMap[pos] == 0) {
+                    nextMap[pos] = id;
+                } else {
+                    int existId = nextMap[pos];
                     if (sSize[id] > sSize[existId]) {
                         sSize[existId] = 0;
-                        tempArr[r][c] = id;
+                        nextMap[pos] = id;
                     } else {
                         sSize[id] = 0;
                     }
                 }
             }
 
-            for (int j = 1; j <= R; j++) {
-                for (int k = 1; k <= C; k++) {
-                    arr[j][k] = tempArr[j][k];
-                }
+            int[] temp = map;
+            map = nextMap;
+            nextMap = temp;
+
+            for (int j = 0; j < totalCells; j++) {
+                nextMap[j] = 0;
             }
         }
-        sb.append(sum);
-        System.out.println(sb);
-        br.close();
+
+        System.out.print(sum);
+    }
+
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
