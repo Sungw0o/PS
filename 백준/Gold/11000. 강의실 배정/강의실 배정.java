@@ -3,57 +3,53 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.PriorityQueue;
+import java.util.StringTokenizer;
 
 public class Main {
-    static class Lecture implements Comparable<Lecture>{
-        private int startTime;
-        private int endTime;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+
+        Lecture[] lectures = new Lecture[N];
+        for (int i = 0; i < N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+            lectures[i] = new Lecture(start, end);
+        }
+
+        Arrays.sort(lectures);
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        pq.offer(lectures[0].endTime);
+
+        for (int i = 1; i < N; i++) {
+            if (pq.peek() <= lectures[i].startTime) {
+                pq.poll();
+            }
+            pq.offer(lectures[i].endTime);
+        }
+
+        System.out.println(pq.size());
+        br.close();
+    }
+
+    static class Lecture implements Comparable<Lecture> {
+        int startTime;
+        int endTime;
 
         public Lecture(int startTime, int endTime) {
             this.startTime = startTime;
             this.endTime = endTime;
         }
 
-        public int getStartTime() {
-            return startTime;
-        }
-
-        public int getEndTime() {
-            return endTime;
-        }
-
         @Override
-        public int compareTo(Lecture other) {
-            return Integer.compare(this.startTime, other.startTime);
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        Lecture[] lectures = new Lecture[N];
-        
-        for (int i = 0; i < N; i++) {
-            String[] input = br.readLine().split(" ");
-            int startTime = Integer.parseInt(input[0]);
-            int endTime = Integer.parseInt(input[1]);
-            lectures[i] = new Lecture(startTime, endTime);
-        }
-
-        Arrays.sort(lectures);
-
-        PriorityQueue<Integer> queue = new PriorityQueue<>();
-
-        queue.add(lectures[0].getEndTime());
-
-        for (int i = 1; i < N; i++) {
-
-            if (lectures[i].getStartTime() >= queue.peek()) {
-                queue.poll();
+        public int compareTo(Lecture o) {
+            if (this.startTime == o.startTime) {
+                return Integer.compare(this.endTime, o.endTime);
             }
-            queue.add(lectures[i].getEndTime());
+            return Integer.compare(this.startTime, o.startTime);
         }
-        
-        System.out.println(queue.size());
     }
 }
