@@ -9,58 +9,60 @@ import java.util.StringTokenizer;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+
         int N = Integer.parseInt(br.readLine());
 
-        int[] time = new int[N + 1];
-        int[] inDegree = new int[N + 1];
+        ArrayList<Integer>[] graph = new ArrayList[N + 1];
+        int[] indegree = new int[N + 1];
+        int[] buildTime = new int[N + 1];
         int[] resultTime = new int[N + 1];
-        ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
 
-        for (int i = 0; i <= N; i++) {
-            graph.add(new ArrayList<>());
+        for (int i = 1; i <= N; i++) {
+            graph[i] = new ArrayList<>();
         }
 
         for (int i = 1; i <= N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
-            time[i] = Integer.parseInt(st.nextToken());
+            buildTime[i] = Integer.parseInt(st.nextToken());
 
             while (true) {
-                int prerequisite = Integer.parseInt(st.nextToken());
-                if (prerequisite == -1) {
+                int preBuilding = Integer.parseInt(st.nextToken());
+                if (preBuilding == -1) {
                     break;
                 }
-                graph.get(prerequisite).add(i);
-                inDegree[i]++;
+                graph[preBuilding].add(i);
+                indegree[i]++;
             }
         }
 
         Queue<Integer> queue = new LinkedList<>();
 
         for (int i = 1; i <= N; i++) {
-            if (inDegree[i] == 0) {
-                queue.offer(i);
-                resultTime[i] = time[i];
+            if (indegree[i] == 0) {
+                queue.add(i);
+                resultTime[i] = buildTime[i];
             }
         }
 
         while (!queue.isEmpty()) {
             int current = queue.poll();
 
-            for (int next : graph.get(current)) {
-                resultTime[next] = Math.max(resultTime[next], resultTime[current] + time[next]);
-                inDegree[next]--;
+            for (int next : graph[current]) {
+                resultTime[next] = Math.max(resultTime[next], resultTime[current] + buildTime[next]);
+                indegree[next]--;
 
-                if (inDegree[next] == 0) {
-                    queue.offer(next);
+                if (indegree[next] == 0) {
+                    queue.add(next);
                 }
             }
         }
 
-        StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= N; i++) {
             sb.append(resultTime[i]).append("\n");
         }
-        System.out.print(sb);
+
+        System.out.println(sb);
         br.close();
     }
 }
