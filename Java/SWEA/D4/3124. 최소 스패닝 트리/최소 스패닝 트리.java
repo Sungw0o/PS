@@ -7,6 +7,8 @@ import java.util.StringTokenizer;
 
 public class Solution {
 	private static int T, V, E;
+	private static ArrayList<Node>[] graph;
+	private static boolean[] visited;
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,57 +17,54 @@ public class Solution {
 		T = Integer.parseInt(br.readLine());
 
 		for (int t = 1; t <= T; t++) {
+
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			V = Integer.parseInt(st.nextToken());
 			E = Integer.parseInt(st.nextToken());
 
-			ArrayList<ArrayList<Edge>> graph = new ArrayList<>();
+			graph = new ArrayList[V + 1];
+			visited = new boolean[V + 1];
 
-			for (int i = 0; i <= V; i++) {
-				graph.add(new ArrayList<>());
+			for (int i = 1; i <= V; i++) {
+				graph[i] = new ArrayList<>();
 			}
 
-			for (int i = 1; i <= E; i++) {
+			for (int i = 0; i < E; i++) {
 				st = new StringTokenizer(br.readLine());
-				int from = Integer.parseInt(st.nextToken());
-				int to = Integer.parseInt(st.nextToken());
-				int weight = Integer.parseInt(st.nextToken());
-
-				graph.get(from).add(new Edge(to, weight));
-				graph.get(to).add(new Edge(from, weight));
+				int u = Integer.parseInt(st.nextToken());
+				int v = Integer.parseInt(st.nextToken());
+				int w = Integer.parseInt(st.nextToken());
+				graph[u].add(new Node(v, w));
+				graph[v].add(new Node(u, w));
 			}
 
-			boolean[] visited = new boolean[V + 1];
+			PriorityQueue<Node> pq = new PriorityQueue<>();
 
-			PriorityQueue<Edge> pq = new PriorityQueue<>();
-
-			pq.add(new Edge(1, 0));
-
-			long totalweight = 0;
-
+			pq.offer(new Node(1, 0));
+			long mstCost = 0;
 			int nodeCount = 0;
 
 			while (!pq.isEmpty()) {
-				Edge cur = pq.poll();
+				Node current = pq.poll();
 
-				if (visited[cur.to])
+				if (visited[current.to])
 					continue;
 
-				visited[cur.to] = true;
-				totalweight += cur.weight;
+				visited[current.to] = true;
+				mstCost += current.weight;
 				nodeCount++;
 
 				if (nodeCount == V)
 					break;
 
-				for (Edge next : graph.get(cur.to)) {
+				for (Node next : graph[current.to]) {
 					if (!visited[next.to]) {
 						pq.offer(next);
 					}
 				}
 			}
 
-			sb.append("#").append(t).append(" ").append(totalweight).append("\n");
+			sb.append("#").append(t).append(" ").append(mstCost).append("\n");
 
 		}
 
@@ -73,17 +72,16 @@ public class Solution {
 		br.close();
 	}
 
-	public static class Edge implements Comparable<Edge> {
-		int to;
-		int weight;
+	public static class Node implements Comparable<Node> {
+		int to, weight;
 
-		public Edge(int to, int weight) {
+		public Node(int to, int weight) {
 			this.to = to;
 			this.weight = weight;
 		}
 
 		@Override
-		public int compareTo(Edge o) {
+		public int compareTo(Node o) {
 			return Integer.compare(this.weight, o.weight);
 		}
 	}
