@@ -1,87 +1,86 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Solution {
-    static class Node implements Comparable<Node> {
-        int to;
-        long weight;
 
-        public Node(int to, long weight) {
-            this.to = to;
-            this.weight = weight;
-        }
+	private static class Node implements Comparable<Node> {
+		int to;
+		long weight;
 
-        @Override
-        public int compareTo(Node o) {
-            return Long.compare(this.weight, o.weight);
-        }
-    }
+		public Node(int to, long weight) {
+			this.to = to;
+			this.weight = weight;
+		}
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringBuilder sb = new StringBuilder();
+		@Override
+		public int compareTo(Node o) {
+			return Long.compare(this.weight, o.weight);
+		}
+	}
 
-        int T = Integer.parseInt(br.readLine());
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 
-        for (int t = 1; t <= T; t++) {
-            int N = Integer.parseInt(br.readLine());
+		int T = Integer.parseInt(br.readLine());
 
-            int[] x = new int[N];
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            for (int i = 0; i < N; i++) {
-                x[i] = Integer.parseInt(st.nextToken());
-            }
+		for (int t = 1; t <= T; t++) {
+			int N = Integer.parseInt(br.readLine());
 
-            int[] y = new int[N];
-            st = new StringTokenizer(br.readLine());
-            for (int i = 0; i < N; i++) {
-                y[i] = Integer.parseInt(st.nextToken());
-            }
+			long[] x = new long[N];
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			for (int i = 0; i < N; i++) {
+				x[i] = Long.parseLong(st.nextToken());
+			}
 
-            double E = Double.parseDouble(br.readLine());
+			long[] y = new long[N];
+			st = new StringTokenizer(br.readLine());
+			for (int i = 0; i < N; i++) {
+				y[i] = Long.parseLong(st.nextToken());
+			}
 
-            boolean[] visited = new boolean[N];
-            PriorityQueue<Node> pq = new PriorityQueue<>();
+			double E = Double.parseDouble(br.readLine());
 
-            pq.offer(new Node(0, 0));
+			boolean[] visited = new boolean[N];
+			PriorityQueue<Node> pq = new PriorityQueue<>();
 
-            long totalWeight = 0;
-            int nodeCount = 0;
+			pq.add(new Node(0, 0));
 
-            while (!pq.isEmpty()) {
-                Node cur = pq.poll();
+			long totalCost = 0;
+			int cnt = 0;
 
-                if (visited[cur.to]) continue;
+			while (!pq.isEmpty()) {
+				Node current = pq.poll();
 
-                visited[cur.to] = true;
-                totalWeight += cur.weight;
-                nodeCount++;
+				if (visited[current.to]) {
+					continue;
+				}
 
-                if (nodeCount == N) break;
+				visited[current.to] = true;
+				totalCost += current.weight;
+				cnt++;
 
-                for (int i = 0; i < N; i++) {
-                    if (!visited[i]) {
-                        long dist = getDist(x[cur.to], y[cur.to], x[i], y[i]);
-                        pq.offer(new Node(i, dist));
-                    }
-                }
-            }
+				if (cnt == N) {
+					break;
+				}
 
-            double result = totalWeight * E;
-            sb.append("#").append(t).append(" ").append(Math.round(result)).append("\n");
-        }
+				for (int i = 0; i < N; i++) {
+					if (!visited[i]) {
+						long dist = (x[current.to] - x[i]) * (x[current.to] - x[i])
+								+ (y[current.to] - y[i]) * (y[current.to] - y[i]);
+						pq.add(new Node(i, dist));
+					}
+				}
+			}
 
-        System.out.println(sb);
-        br.close();
-    }
+			long ans = Math.round(totalCost * E);
+			sb.append("#").append(t).append(" ").append(ans).append("\n");
+		}
 
-    static long getDist(int x1, int y1, int x2, int y2) {
-        return (long) Math.pow(x1 - x2, 2) + (long) Math.pow(y1 - y2, 2);
-    }
+		System.out.print(sb.toString());
+		br.close();
+	}
 }
