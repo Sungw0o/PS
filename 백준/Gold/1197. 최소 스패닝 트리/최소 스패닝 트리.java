@@ -1,79 +1,80 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
 
 public class Main {
-    static int[] parent, rank;
 
-    static class Edge implements Comparable<Edge> {
-        int u, v, w;
-        Edge(int u, int v, int w) { this.u = u; this.v = v; this.w = w; }
+    private static int V,E,nodeCnt;
+    private static long mstCost;
+    private static ArrayList<Node>[] graph;
+    private static boolean[] visited;
 
-        @Override
-        public int compareTo(Edge o) {
-            return Integer.compare(this.w, o.w);
-        }
-    }
-
-    static int find(int x) {
-        if (parent[x] != x) {
-            parent[x] = find(parent[x]);  // path compression
-        }
-        return parent[x];
-    }
-
-    static boolean union(int a, int b) {
-        int ra = find(a), rb = find(b);
-        if (ra == rb) return false;
-
-        if (rank[ra] < rank[rb]) {
-            parent[ra] = rb;
-        } else if (rank[ra] > rank[rb]) {
-            parent[rb] = ra;
-        } else {
-            parent[rb] = ra;
-            rank[ra]++;
-        }
-        return true;
-    }
-
+    private static PriorityQueue<Node> pq = new PriorityQueue<>();
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br  = new BufferedReader(new InputStreamReader(System.in));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
 
-        List<Edge> edges = new ArrayList<>(M);
-        for (int i = 0; i < M; i++) {
+        V = Integer.parseInt(st.nextToken());
+        E = Integer.parseInt(st.nextToken());
+
+        graph = new ArrayList[V+1];
+        visited = new boolean[V+1];
+
+        for(int i = 1; i < V+1; i++){
+            graph[i] = new ArrayList<>();
+        }
+
+        for(int i = 0; i < E ; i++){
             st = new StringTokenizer(br.readLine());
-            edges.add(new Edge(
-                    Integer.parseInt(st.nextToken()),
-                    Integer.parseInt(st.nextToken()),
-                    Integer.parseInt(st.nextToken())
-            ));
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+            graph[u].add(new Node(v, w));
+            graph[v].add(new Node(u, w));
+
         }
 
-        Collections.sort(edges);
+        pq.add(new Node(1,0));
+        mstCost = 0;
+        nodeCnt = 0;
 
-        parent = new int[N + 1];
-        rank = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            parent[i] = i;
-            rank[i] = 0;
-        }
 
-        long total = 0;
-        int used = 0;
-        for (Edge e : edges) {
-            if (union(e.u, e.v)) {
-                total += e.w;
-                if (++used == N - 1) break;
+        while(!pq.isEmpty()){
+            Node cur = pq.poll();
+
+            if(visited[cur.to]) continue;
+
+            visited[cur.to] = true;
+            mstCost += cur.weight;
+            nodeCnt++;
+
+            if(nodeCnt == V) break;
+
+            for(Node next : graph[cur.to]){
+                if(!visited[next.to]){
+                    pq.add(next);
+                }
             }
         }
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(total);
-
-        System.out.print(sb);
+        System.out.println(mstCost);
         br.close();
+    }
+
+    public static class Node implements Comparable<Node>{
+        int to, weight;
+
+        public Node(int to, int weight) {
+            this.to = to;
+            this.weight = weight;
+        }
+
+        @Override
+        public int compareTo(Node n){
+            return Integer.compare(this.weight, n.weight);
+        }
     }
 }
