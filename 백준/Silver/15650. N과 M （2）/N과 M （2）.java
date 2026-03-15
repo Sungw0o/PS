@@ -3,44 +3,50 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main { 
+public class Main {
 
-    public static int N, M;
-    public static int[] arr; 
-    public static StringBuilder sb = new StringBuilder();
+    private static int N,M;
+
+    private static int[] arr;
+
+    private static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        arr = new int[M]; 
+        arr = new int[M];
 
-        dfs(1, 0);
 
+
+        backtracking(1,0);
         System.out.println(sb);
         br.close();
+
     }
 
+    public static void backtracking(int start, int cnt){
 
-    public static void dfs(int at, int depth) {
-
-        if (depth == M) {
-            for (int val : arr) {
-                sb.append(val).append(' ');
+        if(cnt == M) {
+            for(int i = 0; i < M; i++){
+                sb.append(arr[i]).append(" ");
             }
             sb.append('\n');
+
             return;
         }
-        
-        for (int i = at; i <= N; i++) {
 
-            arr[depth] = i; 
-            
-            dfs(i + 1, depth + 1);
+        for(int i = start; i <= N; i++){
+                arr[cnt] = i;
+                backtracking(i+1, cnt+1);
+
+
+            }
+
         }
+
     }
-}
