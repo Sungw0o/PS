@@ -1,45 +1,56 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    private static int N, M;
+    private static int N,M;
+
+    private static int[] arr;
     private static boolean[] visited;
-    private static int[] result;
+
+    private static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
-      
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] input = br.readLine().split(" ");
-        N = Integer.parseInt(input[0]);
-        M = Integer.parseInt(input[1]);
 
-        visited = new boolean[N + 1];  
-        result = new int[M];         
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        dfs(0);
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        arr = new int[M];
+
+        visited = new boolean[N+1];
+
+        backtracking(0);
+        System.out.println(sb);
         br.close();
+
     }
 
-  
-    static void dfs(int depth) {
-        
-        if (depth == M) {
-            for (int i = 0; i < M; i++) {
-                System.out.print(result[i] + " ");
+    public static void backtracking(int cnt){
+
+        if(cnt == M) {
+            for(int i = 0; i < M; i++){
+                sb.append(arr[i]).append(" ");
             }
-            System.out.println();
+            sb.append('\n');
+
             return;
         }
 
-        
-        for (int i = 1; i <= N; i++) {
-            if (!visited[i]) {
-                visited[i] = true;      
-                result[depth] = i;      
-                dfs(depth + 1);         
-                visited[i] = false;     
+        for(int i = 1; i <= N; i++){
+            if(!visited[i]){
+                visited[i] = true;
+                arr[cnt] = i;
+                backtracking(cnt + 1);
+                visited[i] = false;
+
             }
+
         }
+
+
     }
 }
