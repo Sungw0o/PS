@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 16688 KB, 시간: 296 ms
+메모리: 14336 KB, 시간: 108 ms
 
 ### 분류
 
@@ -12,7 +12,7 @@
 
 ### 제출 일자
 
-2026년 3월 6일 14:09:47
+2026년 4월 6일 17:17:30
 
 ### 문제 설명
 
@@ -20,11 +20,11 @@
 
 <p>오늘은 집 수리를 위해서 파이프 하나를 옮기려고 한다. 파이프는 아래와 같은 형태이고, 2개의 연속된 칸을 차지하는 크기이다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/3ceac594-87df-487d-9152-c532f7136e1e/-/preview/" style="width: 138px; height: 70px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 138px; height: 70px;"></p>
 
 <p>파이프는 회전시킬 수 있으며, 아래와 같이 3가지 방향이 가능하다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/b29efafa-dbae-4522-809c-76d5c184a231/-/preview/" style="width: 427px; height: 136px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 427px; height: 136px;"></p>
 
 <p>파이프는 매우 무겁기 때문에, 유현이는 파이프를 밀어서 이동시키려고 한다. 벽에는 새로운 벽지를 발랐기 때문에, 파이프가 벽을 긁으면 안 된다. 즉, 파이프는 항상 빈 칸만 차지해야 한다.</p>
 
@@ -34,15 +34,15 @@
 
 <p>아래 그림은 파이프가 놓여진 방향에 따라서 이동할 수 있는 방법을 모두 나타낸 것이고, 꼭 빈 칸이어야 하는 곳은 색으로 표시되어져 있다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/0f445b26-4e5b-4169-8a1a-89c9e115907e/-/preview/" style="width: 578px; height: 203px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 578px; height: 203px;"></p>
 
 <p style="text-align: center;">가로</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/045d071f-0ea2-4ab5-a8db-61c215e7e7b7/-/preview/" style="width: 579px; height: 203px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 579px; height: 203px;"></p>
 
 <p style="text-align: center;">세로</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/ace5e982-6a52-4982-b51d-6c33c6b742bf/-/preview/" style="width: 886px; height: 203px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 886px; height: 203px;"></p>
 
 <p style="text-align: center;">대각선</p>
 
