@@ -1,23 +1,20 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        Map<String, Integer> map = new HashMap<>();
-
-        for(String s : participant){
-            map.put(s, map.getOrDefault(s,0)+1);
+        
+        Map<String, Integer> count = new HashMap<>();
+        for(String name : participant){
+            count.put(name, count.getOrDefault(name,0) +1);
         }
         
-        for(String s : completion){
-            map.put(s, map.get(s)-1);
+        for(String name : completion){
+            count.put(name, count.get(name)-1);
         }
         
-        for (String s : map.keySet()) {
-            if (map.get(s) > 0) {
-                return s;
-            }
+        for (Map.Entry<String, Integer> entry : count.entrySet()) {
+            if (entry.getValue() > 0) return entry.getKey();
         }
-        return "";
+        return ""; 
     }
 }
